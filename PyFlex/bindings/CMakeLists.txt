@@ -7,7 +7,7 @@ find_package(CUDA 9.0 REQUIRED)
 find_package(pybind11 REQUIRED)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG} -MMD -m64 -Wall -std=c++0x")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_FORCE_INLINES -fPIC -fpermissive -fno-strict-aliasing -O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_FORCE_INLINES -fPIC -fpermissive -fno-strict-aliasing -O0") #-O3
 
 set(ROOT $ENV{PYFLEXROOT})
 set(EXAMPLE_BIN pyflex)
