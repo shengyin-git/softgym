@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(1, '/home/shengyin/OneDrive/Lab_Ubun_Projects/softgym/')
+
 import os.path as osp
 import argparse
 import numpy as np
@@ -29,8 +32,8 @@ def show_depth():
 
 def main():
     parser = argparse.ArgumentParser(description='Process some integers.')
-    # ['PassWater', 'PourWater', 'PourWaterAmount', 'RopeFlatten', 'ClothFold', 'ClothFlatten', 'ClothDrop', 'ClothFoldCrumpled', 'ClothFoldDrop', 'RopeConfiguration']
-    parser.add_argument('--env_name', type=str, default='ClothDrop')
+    # ['TestNew', 'PassWater', 'PourWater', 'PourWaterAmount', 'RopeFlatten', 'ClothFold', 'ClothFlatten', 'ClothDrop', 'ClothFoldCrumpled', 'ClothFoldDrop', 'RopeConfiguration']
+    parser.add_argument('--env_name', type=str, default='TestNew')
     parser.add_argument('--headless', type=int, default=0, help='Whether to run the environment with headless rendering')
     parser.add_argument('--num_variations', type=int, default=1, help='Number of environment variations to be generated')
     parser.add_argument('--save_video_dir', type=str, default='./data/', help='Path to the saved video')
@@ -56,6 +59,7 @@ def main():
     frames = [env.get_image(args.img_size, args.img_size)]
     for i in range(env.horizon):
         action = env.action_space.sample()
+        # action = np.array([0, 0.01, 0.01, 0.4, 0, 0, 0.01, 0.6]) 
         # By default, the environments will apply action repitition. The option of record_continuous_video provides rendering of all
         # intermediate frames. Only use this option for visualization as it increases computation.
         _, _, _, info = env.step(action, record_continuous_video=True, img_size=args.img_size)
@@ -63,10 +67,13 @@ def main():
         if args.test_depth:
             show_depth()
 
-    if args.save_video_dir is not None:
-        save_name = osp.join(args.save_video_dir, args.env_name + '.gif')
-        save_numpy_as_gif(np.array(frames), save_name)
-        print('Video generated and save to {}'.format(save_name))
+    # if args.save_video_dir is not None:
+    #     save_name = osp.join(args.save_video_dir, args.env_name + '.gif')
+    #     save_numpy_as_gif(np.array(frames), save_name)
+    #     print('Video generated and save to {}'.format(save_name))
+
+    # pos = pyflex.get_positions()
+    # print(pos)
 
 
 if __name__ == '__main__':

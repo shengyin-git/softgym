@@ -14,7 +14,8 @@ class NormalizedEnv(object):
       obs_alpha=0.001,
       reward_alpha=0.001,
       clip=True,
-      clip_obs=None
+      clip_obs=None,
+      turn_off_scale = False
     ):
         self._wrapped_env = env
         self._scale_reward = scale_reward
@@ -28,6 +29,7 @@ class NormalizedEnv(object):
         self._reward_var = 1.
         self._clip = clip
         self._clip_obs = clip_obs
+        self.turn_off_scale = turn_off_scale
 
     def _update_obs_estimate(self, obs):
         flat_obs = self._wrapped_env.observation_space.flatten(obs)
@@ -71,7 +73,9 @@ class NormalizedEnv(object):
 
     @overrides
     def step(self, action, **kwargs):
-        if isinstance(self._wrapped_env.action_space, Box):
+        if self.turn_off_scale:
+            scaled_action = action
+        elif isinstance(self._wrapped_env.action_space, Box):
             # rescale the action
             lb, ub = self._wrapped_env.action_space.low, self._wrapped_env.action_space.high
             scaled_action = lb + (action + 1.) * 0.5 * (ub - lb)
