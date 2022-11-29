@@ -21,7 +21,7 @@ class TestNewEnv(FlexEnv):
 
         if action_mode == 'picker':
             self.action_tool = Picker(num_picker, picker_radius=picker_radius, picker_threshold=0.005, 
-            particle_radius=0.025, picker_low=(-0.35, 0., -0.35), picker_high=(0.35, 0.3, 0.35))
+            particle_radius=0.025/2, picker_low=(-0.8, 0., -0.8), picker_high=(0.8, 0.3, 0.8))
             self.action_space = self.action_tool.action_space
         elif action_mode in ['sawyer', 'franka']:
             self.action_tool = RobotBase(action_mode)
@@ -71,10 +71,21 @@ class TestNewEnv(FlexEnv):
 
     def get_default_config(self):
         """ Set the default config of the environment and load it to self.config """
-        node_set = np.array([[0, 0, 0.2],[-0.2, 0, -0.1],[0.2, 0, -0.1]])
-        edge_set = np.array([[0,1],[1,2],[2,0]])
         # node_set = np.array([[0, 0, 0],[0.5,0,0]])
         # edge_set = np.array([[0,1]])
+
+        # node_set = np.array([[0, 0, 0.2],[-0.2, 0, -0.1],[0.2, 0, -0.1]])
+        # edge_set = np.array([[0,1],[0,2],[1,2]])
+        # edge_set = np.array([[0,1],[1,2],[2,0]])
+
+        # node_set = np.array([[-0.2, 0, 0.2],[0.2, 0, 0.2],[-0.2, 0, -0.2],[0.2, 0, -0.2]])
+        # edge_set = np.array([[0,1],[0,2],[0,3],[1,3],[2,3]])
+
+        node_set = np.array([[-0.16196716, 0.005, -0.4064387], [0.11936501, 0.005, -0.28543764],
+                                [0.4064387, 0.005, -0.16196716], [-0.4064387, 0.005, 0.16196716],
+                                [-0.12510654, 0.005, 0.28296822], [0.16196716, 0.005, 0.4064387]])
+        edge_set = np.array([[0,3],[3,4],[4,0],[0,1],[1,4],[4,5],[5,1],[1,2],[2,5]])
+        
         config = {
             'node_set': node_set,
             'edge_set': edge_set,
@@ -85,7 +96,7 @@ class TestNewEnv(FlexEnv):
             'mass': 50, # 20
             'camera_name': 'default_camera',
             'camera_params': {'default_camera':
-                                  {'pos': np.array([0, 0.85, 0]),
+                                  {'pos': np.array([0, 1.95, 0]),
                                    'angle': np.array([0 * np.pi, -90 / 180. * np.pi, 0]),
                                    'width': self.camera_width,
                                    'height': self.camera_height}}

@@ -1063,7 +1063,6 @@ void CreateTest(Rope& rope, int num_node, float * node_ptr, int num_edge, float 
 
 	for(int i=0; i<num_edge; ++i)
 	{
-		// if not visited, add to visited set
 		start_node = edge_ptr[i*2];
 		end_node = edge_ptr[i*2+1];
 
@@ -1080,6 +1079,7 @@ void CreateTest(Rope& rope, int num_node, float * node_ptr, int num_edge, float 
 		ini_dis = get_distance(start_x, start_y, start_z, end_x, end_y, end_z);
 		ini_dir = get_direction(start_x, start_y, start_z, end_x, end_y, end_z, ini_dis);
 
+		// if not visited, add to visited set
 		visited_node.push_back(start_node);
 		visited = set<int>(visited_node.begin(), visited_node.end()).size()!=visited_node.size();
 
@@ -1104,7 +1104,7 @@ void CreateTest(Rope& rope, int num_node, float * node_ptr, int num_edge, float 
 					g_buffers->phases.push_back(phase);
 
 					// stretch
-					CreateSpring(prev, prev+1, stretchStiffness, give);
+					CreateSpring(prev, g_buffers->positions.size()-1, stretchStiffness, give);
 					// bending spring
 					if (num_from_start != 1)
 					{
