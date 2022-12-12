@@ -28,6 +28,7 @@
 #pragma once
 
 #include <stdarg.h>
+#include <cstdio>
 
 // disable some warnings
 #if _WIN32
@@ -1292,6 +1293,11 @@ void CreateTest(Rope& rope, int num_node, float * node_ptr, int num_edge, float 
 			}
 		}				
 	}
+	
+	// for(int k=0;k<num_node;++k)
+	// {
+	// 	printf("%d ", node_idx[k]);
+	// }
 }
 
 // void CreateTest(Rope& rope, int num_node, float * node_ptr, int num_edge, float * edge_ptr,
