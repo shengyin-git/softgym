@@ -1,9 +1,9 @@
 
-class SoftgymTest : public Scene
+class SoftgymSimpMesh : public Scene
 {
 public:
 
-    SoftgymTest(const char* name) : Scene(name) {}
+    SoftgymSimpMesh(const char* name) : Scene(name) {}
 
     float cam_x;
     float cam_y;
@@ -49,7 +49,7 @@ public:
 
         Rope r;
         // here the particle size means the rest distance, which is smaller than the contact distance
-        CreateTest(r, num_node, node_ptr, num_edge, edge_ptr, stretchStiffness, bendStiffness, shearStiffness, rest_length, 
+        CreateSimpMesh(r, num_node, node_ptr, num_edge, edge_ptr, stretchStiffness, bendStiffness, shearStiffness, rest_length, 
             NvFlexMakePhase(group++, eNvFlexPhaseSelfCollide | eNvFlexPhaseSelfCollideFilter), mass);
 
         g_ropes.push_back(r);   
@@ -81,6 +81,8 @@ public:
 
 		g_ropeScale = 0.5f;
 		g_warmup = false;
+
+        // return(node_idx);
     }
 
     virtual void CenterCamera(void)

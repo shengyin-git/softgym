@@ -33,7 +33,7 @@ public:
 #include "softgym_scenes/softgym_rigid_cloth.h"
 #include "softgym_scenes/softgym_torus.h"
 #include "softgym_scenes/softgym_rope.h"
-#include "softgym_scenes/softgym_test.h"
+#include "softgym_scenes/softgym_simp_mesh.h"
 
 #include "scenes/adhesion.h"
 #include "scenes/armadilloshower.h"

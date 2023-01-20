@@ -1027,7 +1027,26 @@ float get_inv_mass(int num_node, float * node_ptr, int num_edge, float * edge_pt
 	return inv_mass;
 }
 
-void CreateTest(Rope& rope, int num_node, float * node_ptr, int num_edge, float * edge_ptr,
+class save_get_node_idx {
+	public:
+		int num_nodes;
+		py::array_t<int> buffer_node_idx;
+	
+		void set_values(int num_node, int * node_idx)
+		{
+			num_nodes = num_node;
+			buffer_node_idx = py::array_t<int>((size_t) num_nodes);
+			auto ptr = (int *) buffer_node_idx.request().ptr;
+			for (size_t i = 0; i < num_nodes; i++) 
+			{
+				ptr[i] = node_idx[i];
+				// printf("%d ", node_idx[i]);
+			}
+
+		}
+} get_node_idx;
+
+void CreateSimpMesh(Rope& rope, int num_node, float * node_ptr, int num_edge, float * edge_ptr,
 	float stretchStiffness, float bendStiffness, float shearStiffness,
 	float rest_length, int phase, float mass=1.0f)
 {
@@ -1298,6 +1317,10 @@ void CreateTest(Rope& rope, int num_node, float * node_ptr, int num_edge, float 
 	// {
 	// 	printf("%d ", node_idx[k]);
 	// }
+	// printf("%p ", node_idx);
+	// get_node_idx = node_idx;
+	get_node_idx.set_values(num_node, node_idx);
+	// printf("%p ", get_node_idx);
 }
 
 // void CreateTest(Rope& rope, int num_node, float * node_ptr, int num_edge, float * edge_ptr,
