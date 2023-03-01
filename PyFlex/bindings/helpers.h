@@ -1055,31 +1055,13 @@ void CreateSimpMesh(Rope& rope, int num_node, float * node_ptr, int num_edge, fl
 	std::vector<int> visited_node;
 	int node_idx[num_node];
 
-	int prev;
-	Vec3 p;
-
-	int start_node;
-	int end_node;
-
-	float start_x;
-	float start_y;
-	float start_z;
-	Vec3 start_xyz;
-
-	float end_x;
-	float end_y;
-	float end_z;
-	Vec3 end_xyz;
-
-	float ini_dis;
-	Vec3 ini_dir;
-
-	bool visited;
-	float current_dis;
-	int num_from_start;
-	bool end_visited;
-
-	int num_particles;
+	int prev;Vec3 p;
+	int start_node;	int end_node;
+	float start_x;	float start_y;	float start_z;	Vec3 start_xyz;
+	float end_x;	float end_y;	float end_z;	Vec3 end_xyz;
+	float ini_dis;	Vec3 ini_dir;
+	bool visited;	float current_dis;	int num_from_start;
+	bool end_visited;	int num_particles;
 
 	for(int i=0; i<num_edge; ++i)
 	{
@@ -1106,7 +1088,6 @@ void CreateSimpMesh(Rope& rope, int num_node, float * node_ptr, int num_edge, fl
 		if (visited)
 		{
 			visited_node.pop_back();
-			// no need to add it to the rope
 			prev = node_idx[start_node];
 
 			p = start_xyz;
@@ -1311,117 +1292,41 @@ void CreateSimpMesh(Rope& rope, int num_node, float * node_ptr, int num_edge, fl
 				}
 			}
 		}				
-	}
-	
+	}	
 	// for(int k=0;k<num_node;++k)
 	// {
 	// 	printf("%d ", node_idx[k]);
 	// }
 	// printf("%p ", node_idx);
-	// get_node_idx = node_idx;
-	get_node_idx.set_values(num_node, node_idx);
 	// printf("%p ", get_node_idx);
+	get_node_idx.set_values(num_node, node_idx);	
 }
 
-// void CreateTest(Rope& rope, int num_node, float * node_ptr, int num_edge, float * edge_ptr,
-// 	float stretchStiffness, float bendStiffness, float shearStiffness,
-// 	float rest_length, int phase, float mass=1.0f)
-// {
-// 	float give = 0.075;
-// 	float invmass = get_inv_mass(num_node, node_ptr, num_edge, edge_ptr, rest_length, mass);
-
-// 	int prev;
-// 	Vec3 p;
-
-// 	int start_node;
-// 	int end_node;
-
-// 	float start_x;
-// 	float start_y;
-// 	float start_z;
-// 	Vec3 start_xyz;
-
-// 	float end_x;
-// 	float end_y;
-// 	float end_z;
-// 	Vec3 end_xyz;
-
-// 	float ini_dis;
-// 	Vec3 ini_dir;
-
-// 	float current_dis;
-// 	int num_from_start;
-
-// 	int num_particles;
+void CreateSimpTriMesh(Rope& rope, int num_nodes, float * node_ptr, int num_springs, auto * spring_ptr, int phase)
+{
+	float give = 0;
 	
-// 	for(int i=0; i<num_edge; ++i)
-// 	{
-// 		// if not visited, add to visited set
-// 		start_node = edge_ptr[i*2];
-// 		end_node = edge_ptr[i*2+1];
+	for(int i = 0; i < num_nodes; ++i)
+	{
+		float tmp_x = node_ptr[i*4];
+		float tmp_y = node_ptr[i*4+1];
+		float tmp_z = node_ptr[i*4+2];
+		float tmp_inv_mass = node_ptr[i*4+3];
+		rope.mIndices.push_back(int(g_buffers->positions.size()));
+		g_buffers->positions.push_back(Vec4(tmp_x, tmp_y, tmp_z, tmp_inv_mass));
+		g_buffers->velocities.push_back(0.0f);
+		g_buffers->phases.push_back(phase);
+	}
 
-// 		start_x = node_ptr[start_node*3];
-// 		start_y = node_ptr[start_node*3+1];
-// 		start_z = node_ptr[start_node*3+2];
-// 		start_xyz = Vec3(start_x, start_y, start_z);
-
-// 		end_x = node_ptr[end_node*3];
-// 		end_y = node_ptr[end_node*3+1];
-// 		end_z = node_ptr[end_node*3+2];
-// 		end_xyz = Vec3(end_x, end_y, end_z);
-
-// 		ini_dis = get_distance(start_x, start_y, start_z, end_x, end_y, end_z);
-// 		ini_dir = get_direction(start_x, start_y, start_z, end_x, end_y, end_z, ini_dis);
-
-// 		if (false)
-// 		{
-// 			printf('no use now');
-// 		}
-// 		else 
-// 		{
-// 			num_particles = g_buffers->positions.size();
-
-// 			p = start_xyz;
-
-// 			rope.mIndices.push_back(num_particles);			
-// 			g_buffers->positions.push_back(Vec4(p.x, p.y, p.z, invmass));
-// 			g_buffers->velocities.push_back(0.0f);
-// 			g_buffers->phases.push_back(phase);
-
-// 			prev = g_buffers->positions.size()-1;
-
-// 			if (true)
-// 			{
-// 				current_dis = get_distance(p.x, p.y, p.z, end_x, end_y, end_z);
-// 				num_from_start = 1;
-// 				while (current_dis > 1*rest_length)
-// 				{					
-// 					p += ini_dir * rest_length;
-// 					rope.mIndices.push_back(int(g_buffers->positions.size()));
-// 					g_buffers->positions.push_back(Vec4(p.x, p.y, p.z, invmass));
-// 					g_buffers->velocities.push_back(0.0f);
-// 					g_buffers->phases.push_back(phase);
-
-// 					// stretch
-// 					CreateSpring(prev, prev+1, stretchStiffness, give);
-// 					// bending spring
-// 					if (num_from_start!=1)
-// 					{
-// 						CreateSpring(prev-1, prev+1, bendStiffness*0.5f, give);
-// 					}
-// 					prev = g_buffers->positions.size()-1;
-// 					num_from_start += 1;
-// 					current_dis = get_distance(p.x, p.y, p.z, end_x, end_y, end_z);
-// 				}
-// 			}
-// 			else // the edge length is too small
-// 			{
-// 				printf('no use now');
-// 			}
-// 		}				
-// 	}
-// }
-
+	for(int i = 0; i < num_springs; ++i)
+	{
+		int tmp_id1 = spring_ptr[i*3];
+		int tmp_id2 = spring_ptr[i*3+1];
+		float stiffness = spring_ptr[i*3+2];
+		// printf("%i, %i, %f\n", tmp_id1, tmp_id2, stiffness);
+		CreateSpring(tmp_id1, tmp_id2, stiffness, give);
+	}
+}
 
 namespace
 {

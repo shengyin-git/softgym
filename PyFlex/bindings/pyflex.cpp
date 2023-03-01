@@ -42,6 +42,7 @@ void pyflex_init(bool headless=false, bool render=true, int camera_width=720, in
     g_scenes.push_back(new SoftgymRigidCloth("Softgym Rigid Cloth"));
     g_scenes.push_back(new SoftgymTorus("Softgym Torus"));
     g_scenes.push_back(new SoftgymSimpMesh("Softgym Simp Mesh"));
+    g_scenes.push_back(new SoftgymSimpTriMesh("Softgym Simp Tri Mesh"));
 
     SoftgymSoftBody::Instance rope(make_path(rope_path, "/data/rope.obj"));
 	rope.mScale = Vec3(50.0f);
