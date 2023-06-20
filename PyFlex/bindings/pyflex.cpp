@@ -11,20 +11,6 @@ char *make_path(char *full_path, std::string path) {
     return full_path;
 }
 
-py::array_t<int> pyflex_get_node_idx() {
-    // int num_nodes = 4;
-    // printf("%p ", get_node_idx);
-    // printf("%d ", get_node_idx[0]);
-    // auto returned_node_idx = py::array_t<int>((size_t) num_nodes);
-    // auto ptr = (int *) returned_node_idx.request().ptr;
-
-    // for (size_t i = 0; i < num_nodes; i++) {
-    //     ptr[i] = get_node_idx;
-    // }
-
-    return get_node_idx.buffer_node_idx;
-}
-
 void pyflex_init(bool headless=false, bool render=true, int camera_width=720, int camera_height=720) {
     g_screenWidth = camera_width;
     g_screenHeight = camera_height;
@@ -41,9 +27,11 @@ void pyflex_init(bool headless=false, bool render=true, int camera_width=720, in
     g_scenes.push_back(new SoftgymRope("Softgym Rope"));
     g_scenes.push_back(new SoftgymRigidCloth("Softgym Rigid Cloth"));
     g_scenes.push_back(new SoftgymTorus("Softgym Torus"));
-    g_scenes.push_back(new SoftgymSimpMesh("Softgym Simp Mesh"));
     g_scenes.push_back(new SoftgymSimpTriMesh("Softgym Simp Tri Mesh"));
-
+    g_scenes.push_back(new SoftgymCloth("Softgym Flag Cloth"));
+    g_scenes.push_back(new SoftgymTshirt("Softgym Tshirt"));
+    g_scenes.push_back(new Softgym3dCloth("Softgym 3D Cloth"));
+    
     SoftgymSoftBody::Instance rope(make_path(rope_path, "/data/rope.obj"));
 	rope.mScale = Vec3(50.0f);
 	rope.mClusterSpacing = 1.5f;
@@ -1199,7 +1187,5 @@ PYBIND11_MODULE(pyflex, m) {
 
     m.def("add_rigid_body", &pyflex_add_rigid_body);
     m.def("set_shape_color", &pyflex_set_shape_color, "Set the color of the shape");
-
-    m.def("get_node_idx", &pyflex_get_node_idx, "Get the index of the nodes");
 }
 
