@@ -42,7 +42,7 @@ public:
 
         g_ropes.push_back(r);   
 
-        g_params.radius = rest_length*2;
+        g_params.radius = rest_length; //rest_length*2;
 		g_params.numIterations = 4;
 		g_params.dynamicFriction = 1.0f;
 		// g_params.staticFriction = 0.8f;
