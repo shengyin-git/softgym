@@ -21,20 +21,21 @@ public:
         int num_nodes = ptr[0];
         int num_springs = ptr[1];
         float rest_length = ptr[2];
+        float render_length = ptr[3];
 
-        cam_x = ptr[3];
-        cam_y = ptr[4];
-        cam_z = ptr[5];
-        cam_angle_x = ptr[6];
-        cam_angle_y = ptr[7];
-        cam_angle_z = ptr[8];
-        cam_width = int(ptr[9]);
-        cam_height = int(ptr[10]);
+        cam_x = ptr[4];
+        cam_y = ptr[5];
+        cam_z = ptr[6];
+        cam_angle_x = ptr[7];
+        cam_angle_y = ptr[8];
+        cam_angle_z = ptr[9];
+        cam_width = int(ptr[10]);
+        cam_height = int(ptr[11]);
 
         int group = 0;
 
-        auto node_ptr = (float *) ptr + 11; 
-        auto spring_ptr = (float *) ptr + 11 + num_nodes * 4; 
+        auto node_ptr = (float *) ptr + 12; 
+        auto spring_ptr = (float *) ptr + 12 + num_nodes * 4; 
 
         Rope r;
         // here the particle size means the rest distance, which is smaller than the contact distance
@@ -42,7 +43,7 @@ public:
 
         g_ropes.push_back(r);   
 
-        g_params.radius = rest_length; //rest_length*2;
+        g_params.radius = render_length; //rest_length*2;
 		g_params.numIterations = 4;
 		g_params.dynamicFriction = 1.0f;
 		// g_params.staticFriction = 0.8f;
