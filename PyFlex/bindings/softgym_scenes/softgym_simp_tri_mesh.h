@@ -64,9 +64,13 @@ public:
 
 		// draw options		
 		g_drawEllipsoids = false;
-		g_drawPoints = false;
+		g_drawPoints = true;
 		g_drawDiffuse = false;
 		g_drawSprings = 0;
+
+        g_drawCloth = false;
+        g_drawRopes = false;
+        g_drawMesh = false;
 
 		g_ropeScale = 0.5f;
 		g_warmup = false;
