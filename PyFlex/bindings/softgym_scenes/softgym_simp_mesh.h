@@ -1,8 +1,8 @@
-class SoftgymSimpTriMesh : public Scene
+class SoftgymSimpMesh : public Scene
 {
 public:
 
-    SoftgymSimpTriMesh(const char* name) : Scene(name) {}
+    SoftgymSimpMesh(const char* name) : Scene(name) {}
 
     float cam_x;
     float cam_y;
@@ -13,36 +13,46 @@ public:
     int cam_width;
     int cam_height;	
 
-    // params ordering:    
+    // params ordering: node set, edge set, (!!!!!!!possibly particle radius!!!!!!!!!), stretch, bend, shear
+    // render_type, cam_X, cam_y, cam_z, angle_x, angle_y, angle_z, width, height
+    
     void Initialize(py::array_t<float> scene_params, int thread_idx = 0)
     {
         auto ptr = (float *) scene_params.request().ptr;
-        int num_nodes = ptr[0];
-        int num_springs = ptr[1];
-        float rest_length = ptr[2];
-        float render_length = ptr[3];
+        float rest_length = ptr[0];
 
-        cam_x = ptr[4];
-        cam_y = ptr[5];
-        cam_z = ptr[6];
-        cam_angle_x = ptr[7];
-        cam_angle_y = ptr[8];
-        cam_angle_z = ptr[9];
-        cam_width = int(ptr[10]);
-        cam_height = int(ptr[11]);
+        // cloth
+        float stretchStiffness = ptr[1]; //0.9f;
+		float bendStiffness = ptr[2]; //1.0f;
+		float shearStiffness = ptr[3]; //0.9f;
+
+        float mass = float(ptr[4]);	// avg bath towel is 500-700g; the mass here is the total mass 
+
+        cam_x = ptr[5];
+        cam_y = ptr[6];
+        cam_z = ptr[7];
+        cam_angle_x = ptr[8];
+        cam_angle_y = ptr[9];
+        cam_angle_z = ptr[10];
+        cam_width = int(ptr[11]);
+        cam_height = int(ptr[12]);
+
+        int num_node = ptr[13];
+        int num_edge = ptr[14];
 
         int group = 0;
 
-        auto node_ptr = (float *) ptr + 12; 
-        auto spring_ptr = (float *) ptr + 12 + num_nodes * 4; 
+        auto node_ptr = (float *) ptr + 15; //node_set.request().ptr;
+        auto edge_ptr = (float *) ptr + 15+num_node*3; //edge_set.request().ptr;
 
         Rope r;
         // here the particle size means the rest distance, which is smaller than the contact distance
-        CreateSimpTriMesh(r, num_nodes, node_ptr, num_springs, spring_ptr, NvFlexMakePhase(group++, eNvFlexPhaseSelfCollide | eNvFlexPhaseSelfCollideFilter));
+        CreateSimpMesh(r, num_node, node_ptr, num_edge, edge_ptr, stretchStiffness, bendStiffness, shearStiffness, rest_length, 
+            NvFlexMakePhase(group++, eNvFlexPhaseSelfCollide | eNvFlexPhaseSelfCollideFilter), mass);
 
         g_ropes.push_back(r);   
 
-        g_params.radius = render_length; //rest_length*2;
+        g_params.radius = rest_length*2;
 		g_params.numIterations = 4;
 		g_params.dynamicFriction = 1.0f;
 		// g_params.staticFriction = 0.8f;
@@ -63,13 +73,9 @@ public:
 
 		// draw options		
 		g_drawEllipsoids = false;
-		g_drawPoints = true;
+		g_drawPoints = false;
 		g_drawDiffuse = false;
 		g_drawSprings = 0;
-
-        g_drawCloth = false;
-        g_drawRopes = false;
-        g_drawMesh = false;
 
 		g_ropeScale = 0.5f;
 		g_warmup = false;

@@ -1,0 +1,25 @@
+nvidia-docker run \
+    -v /home/shengyin/anaconda3:/home/shengyin/anaconda3 \
+    -v /home/shengyin/OneDrive/Lab_Ubun_Projects/softgym:/workspace/softgym \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    --gpus all \
+    -e DISPLAY=$DISPLAY \
+    -e QT_X11_NO_MITSHM=1 \
+    -it xingyu/softgym:latest bash
+    
+nvidia-docker run \
+    -v /home/shengyin/anaconda3:/workspace/anaconda3 \
+    -v /home/shengyin/OneDrive/Lab_Ubun_Projects/softgym:/workspace/softgym \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    --gpus all \
+    -e DISPLAY=$DISPLAY \
+    -e QT_X11_NO_MITSHM=1 \
+    -it xingyu/softgym:latest bash
+    
+export PATH="/home/shengyin/anaconda3/bin:$PATH"
+
+export PYFLEXROOT=${PWD}/PyFlex
+export PYTHONPATH=${PYFLEXROOT}/bindings/build:$PYTHONPATH
+export LD_LIBRARY_PATH=${PYFLEXROOT}/external/SDL2-2.0.4/lib/x64:$LD_LIBRARY_PATH
+
+/opt/TurboVNC/bin/vncviewer

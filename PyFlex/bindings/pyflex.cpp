@@ -5,10 +5,16 @@ char rope_path[100];
 char box_high_path[100];
 char sphere_path[100];
 
-char *make_path(char *full_path, std::string path) {
+char *make_path(char *full_path, std::string path) 
+{
     strcpy(full_path, getenv("PYFLEXROOT"));
     strcat(full_path, path.c_str());
     return full_path;
+}
+
+py::array_t<int> pyflex_get_node_idx() 
+{
+    return get_node_idx.buffer_node_idx;
 }
 
 void pyflex_init(bool headless=false, bool render=true, int camera_width=720, int camera_height=720) {
@@ -31,6 +37,7 @@ void pyflex_init(bool headless=false, bool render=true, int camera_width=720, in
     g_scenes.push_back(new SoftgymCloth("Softgym Flag Cloth"));
     g_scenes.push_back(new SoftgymTshirt("Softgym Tshirt"));
     g_scenes.push_back(new Softgym3dCloth("Softgym 3D Cloth"));
+    g_scenes.push_back(new SoftgymSimpMesh("Softgym Simp Mesh"));
     
     SoftgymSoftBody::Instance rope(make_path(rope_path, "/data/rope.obj"));
 	rope.mScale = Vec3(50.0f);
@@ -1187,5 +1194,6 @@ PYBIND11_MODULE(pyflex, m) {
 
     m.def("add_rigid_body", &pyflex_add_rigid_body);
     m.def("set_shape_color", &pyflex_set_shape_color, "Set the color of the shape");
+    m.def("get_node_idx", &pyflex_get_node_idx, "Get the index of the nodes");
 }
 
