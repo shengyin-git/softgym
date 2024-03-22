@@ -23,3 +23,34 @@ export PYTHONPATH=${PYFLEXROOT}/bindings/build:$PYTHONPATH
 export LD_LIBRARY_PATH=${PYFLEXROOT}/external/SDL2-2.0.4/lib/x64:$LD_LIBRARY_PATH
 
 /opt/TurboVNC/bin/vncviewer
+
+singularity pull docker://xingyu/softgym
+
+singularity build mysoftgym.sif docker://xingyu/softgym
+
+singularity build --sandbox mysoftgym mysoftgym.sif
+
+singularity shell -w --home=home:$HOME --bind $HOME/Projects/softgym:$HOME/softgym --bind $HOME/anaconda3:$HOME/anaconda3 mysoftgym
+
+cd softgym/
+
+export PATH="$HOME/anaconda3/bin:$PATH"
+
+. prepare_1.0.sh
+
+. compile_1.0.sh
+
+export PYFLEXROOT=${PWD}/PyFlex
+export PYTHONPATH=${PYFLEXROOT}/bindings/build:$PYTHONPATH
+export LD_LIBRARY_PATH=${PYFLEXROOT}/external/SDL2-2.0.4/lib/x64:$LD_LIBRARY_PATH
+
+export PATH="$PWD:$PATH"
+
+
+
+singularity shell -w --home=home:$HOME --nv --bind $HOME/Projects/softgym:$HOME/softgym --bind $HOME/anaconda3:$HOME/anaconda3 --bind $HOME/Projects/softagent_cloth_folding_cem:$HOME/softagent_cloth_folding_cem mysoftgym
+
+singularity shell -w --home=home:$HOME --nv --bind $HOME/Projects/softgym:$HOME/softgym --bind $HOME/anaconda3:$HOME/anaconda3 --bind $HOME/Projects/my_softagent:$HOME/my_softagent mysoftgym
+
+
+singularity shell -w --home=home:$HOME --nv --bind $HOME/Projects/softgym:$HOME/softgym --bind $HOME/anaconda3:$HOME/anaconda3 --bind $HOME/Projects/softagent:$HOME/softagent mysoftgym
