@@ -934,6 +934,44 @@ void CreateSpringGrid(Vec3 lower, int dx, int dy, int dz, float radius, int phas
 	}	
 }
 
+void CreateSingleTshirt(int phase, int num_points, float * points_ptr, int num_triangles, auto * triangles_ptr, int num_springs, auto * springs_ptr)
+{
+	int baseIndex = int(g_buffers->positions.size());
+
+	for (int i=0; i < num_points; ++i)
+	{
+		float tmp_x = points_ptr[i*4];
+		float tmp_y = points_ptr[i*4+2];
+		float tmp_z = points_ptr[i*4+1];
+		float tmp_inv_mass = points_ptr[i*4+3];
+		
+		g_buffers->positions.push_back(Vec4(tmp_x, tmp_y, tmp_z, tmp_inv_mass));
+		g_buffers->velocities.push_back(0.0f);
+		g_buffers->phases.push_back(phase);
+	}
+
+	for (int i=0; i < num_triangles; ++i)
+	{
+		int tmp_0 = points_ptr[i*3];
+		int tmp_1 = points_ptr[i*3+1];
+		int tmp_2 = points_ptr[i*3+2];
+
+		g_buffers->triangles.push_back(tmp_0);
+		g_buffers->triangles.push_back(tmp_1);
+		g_buffers->triangles.push_back(tmp_2);
+		g_buffers->triangleNormals.push_back(Vec3(0.0f, 1.0f, 0.0f));
+	}
+
+	for(int i = 0; i < num_springs; ++i)
+	{
+		int tmp_id1 = springs_ptr[i*3];
+		int tmp_id2 = springs_ptr[i*3+1];
+		float stiffness = springs_ptr[i*3+2];
+		// printf("%i, %i, %f\n", tmp_id1, tmp_id2, stiffness);
+		CreateSpring(tmp_id1, tmp_id2, stiffness);
+	}
+}
+
 void CreateRope(Rope& rope, Vec3 start, Vec3 dir, float stretchStiffness, int segments, float length, int phase, float spiralAngle=0.0f, float invmass=1.0f, 
 	float give=0.075f, float bendingStiffness=0.8)
 {

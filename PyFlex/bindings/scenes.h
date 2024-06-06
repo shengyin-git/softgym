@@ -37,6 +37,7 @@ public:
 #include "softgym_scenes/softgym_3dcloth.h"
 #include "softgym_scenes/softgym_tshirt.h"
 #include "softgym_scenes/softgym_simp_mesh.h"
+#include "softgym_scenes/softgym_single_tshirt.h"
 
 #include "scenes/adhesion.h"
 #include "scenes/armadilloshower.h"

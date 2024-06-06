@@ -34,7 +34,7 @@ void pyflex_init(bool headless=false, bool render=true, int camera_width=720, in
     g_scenes.push_back(new SoftgymRigidCloth("Softgym Rigid Cloth"));
     g_scenes.push_back(new SoftgymTorus("Softgym Torus"));
     g_scenes.push_back(new SoftgymSimpTriMesh("Softgym Simp Tri Mesh"));
-    g_scenes.push_back(new SoftgymCloth("Softgym Flag Cloth"));
+    g_scenes.push_back(new SoftgymSingleTshirt("Softgym Single Tshirt"));
     g_scenes.push_back(new SoftgymTshirt("Softgym Tshirt"));
     g_scenes.push_back(new Softgym3dCloth("Softgym 3D Cloth"));
     g_scenes.push_back(new SoftgymSimpMesh("Softgym Simp Mesh"));
